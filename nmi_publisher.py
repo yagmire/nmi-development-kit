@@ -21,7 +21,7 @@ def pack(name=None, folder=None, exe=None, version=None):
     msg = QMessageBox()
     msg.setIcon(QMessageBox.Information)
     msg.setText(f"The packing of '{name}' has finished!")
-    msg.setInformativeText("Finished pack.")
+    msg.setInformativeText(f"You can find '{name}.nmi' in {os.getcwd()} You can share this file for others to install.")
     msg.setWindowTitle("NMI Publisher Kit")
     msg.setStandardButtons(QMessageBox.Ok)
     retval = msg.exec_()
