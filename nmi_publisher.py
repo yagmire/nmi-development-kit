@@ -1,5 +1,5 @@
 import sys, py7zr, json, os, shutil
-from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButton, QVBoxLayout, QFileDialog, QFrame
+from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButton, QVBoxLayout, QFileDialog, QFrame, QMessageBox
 
 def pack(name=None, folder=None, exe=None, version=None):
     info_template_json = {
@@ -9,6 +9,7 @@ def pack(name=None, folder=None, exe=None, version=None):
     }
     with open('nmi.iinfo', 'w') as nmi_iinfo:
         json.dump(info_template_json, nmi_iinfo, indent=4)
+    print("Created iinfo.")
     shutil.move("nmi.iinfo",f"{folder}")
     print("\nPacking game with Name:", name, "\nFolder:", folder, "\nEXE File:", exe, "\nVersion:", version)
     with py7zr.SevenZipFile(f"{name}.nmi", 'w', password=r"m1FC%0%0", header_encryption=True) as archive:
@@ -16,6 +17,14 @@ def pack(name=None, folder=None, exe=None, version=None):
         os.chdir(f"{os.path.dirname(folder)}")
         archive.writeall(f"{os.path.basename(folder)}/")
         os.chdir(orig_dir)
+    print(f"\nPacking of '{name}' has finished.")
+    msg = QMessageBox()
+    msg.setIcon(QMessageBox.Information)
+    msg.setText(f"The packing of '{name}' has finished!")
+    msg.setInformativeText("Finished pack.")
+    msg.setWindowTitle("NMI Publisher Kit")
+    msg.setStandardButtons(QMessageBox.Ok)
+    retval = msg.exec_()
 
 class NMI_Publishing_Kit(QWidget):
     def __init__(self):
